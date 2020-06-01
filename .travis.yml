@@ -55,11 +55,6 @@ cache:
   - $HOME/.m2
   - $HOME/local
 
-notifications:
-  email:
-  - issues@tajo.apache.org
-  irc: "chat.freenode.net#tajo"
-
 before_install: 
   # Disable services enabled by default
   # http://docs.travis-ci.com/user/database-setup/#MySQL
