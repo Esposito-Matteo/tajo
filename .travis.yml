@@ -17,6 +17,11 @@ sudo: required
 dist: trusty
 language: java
 
+addons:
+  sonarcloud:
+    organization: "esposito-matteo190320202155"
+    token: 5d81831e177714659ddbf9942f258211923e9bee
+
 git:
   depth: 150
 
@@ -65,8 +70,8 @@ before_install:
   - df -h
 
 install:
-  - mvn clean install -q -ff -Dsurefire.useFile=false $HADOOP_FLAG -Pdist -DskipTests -Dtar
-
+ # - mvn clean install -q -ff -Dsurefire.useFile=false $HADOOP_FLAG -Pdist -DskipTests -Dtar
+- mvn clean -q -ff -Dsurefire.useFile=false $HADOOP_FLAG -Pdist -DskipTests -Dtar org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Esposito-Matteo_tajo
 script: 
   - travis_wait 30 mvn $HADOOP_FLAG $TEST_FLAG
   - sh -c "dmesg | grep -i OOM || exit 0"
