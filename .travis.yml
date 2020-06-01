@@ -8,7 +8,7 @@ jdk:
 addons:
   sonarcloud:
     organization: "esposito-matteo190320202155"
-    token: 5d81831e177714659ddbf9942f258211923e9bee
+    token: e4d3d8da48c1d809f55cb671dbfdf67bbd459d66
     
 script:
 - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package org.jacoco:jacoco-maven-plugin:report
