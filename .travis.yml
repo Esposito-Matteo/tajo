@@ -9,7 +9,7 @@ addons:
   sonarcloud:
     organization: "esposito-matteo190320202155"
     token:
-    secure: e4d3d8da48c1d809f55cb671dbfdf67bbd459d66
+      secure: e4d3d8da48c1d809f55cb671dbfdf67bbd459d66
     
 script:
 - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package org.jacoco:jacoco-maven-plugin:report sonar:sonar -Dsonar.projectKey=Esposito-Matteo_tajo
