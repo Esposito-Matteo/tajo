@@ -7,7 +7,7 @@ addons:
   sonarcloud:
     organization: "esposito-matteo190320202155"
     token: 
-      secret: e4d3d8da48c1d809f55cb671dbfdf67bbd459d66
+      secure: e4d3d8da48c1d809f55cb671dbfdf67bbd459d66
     
 before_install:
 - mvn verify -DfailIfNoTests=false -Dmaven.test.failure.ignore=true sonar:sonar -Dsonar.projectKey=Esposito-Matteo_tajo -Dsonar.login=e4d3d8da48c1d809f55cb671dbfdf67bbd459d66
