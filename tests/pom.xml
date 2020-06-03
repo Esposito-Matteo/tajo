@@ -4,9 +4,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>bookkeeper</artifactId>
-    <groupId>org.apache.bookkeeper</groupId>
-    <version>4.11.0-SNAPSHOT</version>
+    <artifactId>tajo</artifactId>
+    <groupId>org.apache.tajo</groupId>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
   
   <properties>
@@ -15,13 +15,6 @@
 
   <artifactId>tests</artifactId>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.bookkeeper</groupId>
-      <artifactId>bookkeeper-server</artifactId>
-      <version>4.11.0-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
 
   <name>Apache Bookkeeper :: Tests Coverage Report</name>
 
