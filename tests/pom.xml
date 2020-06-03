@@ -16,7 +16,7 @@
   <artifactId>tests</artifactId>
 
 
-  <name>Apache Bookkeeper :: Tests Coverage Report</name>
+  <name>Apache Tajo :: Tests Report</name>
 
   <build>
     <plugins>
