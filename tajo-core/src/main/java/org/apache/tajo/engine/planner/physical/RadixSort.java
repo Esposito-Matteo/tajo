@@ -19,6 +19,7 @@
 package org.apache.tajo.engine.planner.physical;
 
 import io.netty.util.internal.PlatformDependent;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.tajo.SessionVars;
@@ -55,7 +56,8 @@ public class RadixSort {
   private static final Log LOG = LogFactory.getLog(RadixSort.class);
 
   private static class RadixSortContext {
-    @Contended UnSafeTuple[] in;
+    @Contended
+    UnSafeTuple[] in;
     @Contended UnSafeTuple[] out;
     @Contended final int[] keys;
 
