@@ -1,5 +1,3 @@
-sudo: required
-dist: trusty
 language: java
 jdk:
 - openjdk8
@@ -8,28 +6,9 @@ jdk:
 addons:
   sonarcloud:
     organization: "esposito-matteo190320202155"
-    token: 5d81831e177714659ddbf9942f258211923e9bee
-
-cache:
-  directories:
-  - $HOME/.m2
-  - $HOME/local
-
-git:
-  depth: 150
-
-
-before_install: 
-  # Disable services enabled by default
-  # http://docs.travis-ci.com/user/database-setup/#MySQL
-  - sudo /etc/init.d/mysql stop
-  - sudo /etc/init.d/postgresql stop
-  - sudo sh -c "ulimit -p 10000 && ulimit -n 64000 && ulimit -t unlimited && ulimit -a"
-  - free -m
-  - df -h
-
-install:
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  #- mvn verify -DfailIfNoTests=false -Dmaven.test.failure.ignore=true org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
-- mvn clean -q -ff -Dsurefire.useFile=false -Dhadoop.version=2.3.0 -DfailIfNoTests=false -Dmaven.test.failure.ignore=true  -Pdist -DskipTests -Dtar org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Esposito-Matteo_tajo
-
+    token: 
+      secure: e4d3d8da48c1d809f55cb671dbfdf67bbd459d66
+    
+script:
+- mvn verify -DfailIfNoTests=false -Dmaven.test.failure.ignore=true sonar:sonar -Dsonar.projectKey=Esposito-Matteo_tajo -Dsonar.login=e4d3d8da48c1d809f55cb671dbfdf67bbd459d66
+ 
