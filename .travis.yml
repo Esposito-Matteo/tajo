@@ -20,5 +20,5 @@ git:
 
 
 install: mvn clean install -q -DfailIfNoTests=false -Dhadoop.version=2.7.1 -Dlicense.skip  -Drat.skip=true -Drat.numUnapprovedLicenses=100000
-script: mvn clean verify -Drat.skip=true  -Drat.numUnapprovedLicenses=10000000 -Pcoverage
+script: mvn verify sonar:sonar -Dsonar.projectKey=Esposito-Matteo_tajo -Drat.skip=true  -Drat.numUnapprovedLicenses=10000000 -Pcoverage
 
