@@ -75,6 +75,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <tajo.root>${basedir}</tajo.root>
+    <aggregate.report.dir>tests/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
+
   </properties>
 
   <modules>
@@ -100,11 +102,13 @@
     <module>tajo-cluster-tests</module>
     <module>tajo-tablespace-example</module>
     <module>tajo-dist</module>
+    <module>tests</module>
   </modules>
 
   <build>
     <pluginManagement>
       <plugins>
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
@@ -113,10 +117,18 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>2.19</version>
+          <version>2.21.0</version>
           <configuration>
+            <argLine>
+              -Xmx1024m -XX:MaxPermSize=512m -javaagent:${basedir}/../ba-dua-lib/ba-dua-agent-rt-0.4.1-SNAPSHOT-all.jar  -Xbootclasspath/p:${basedir}/ba-dua-lib/ba-dua-agent-rt-0.4.1-SNAPSHOT-all.jar -Dfile.encoding=${project.build.sourceEncoding} ${argLine} -Xmx2G -Djava.net.preferIPv4Stack=true -Dio.netty.leakDetection.level=paranoid</argLine>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            <forkCount>3</forkCount>
+            <reuseForks>true</reuseForks>
+            <!-- <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds> -->
+            <rerunFailingTestsCount>2</rerunFailingTestsCount>
             <aggregate>true</aggregate>
           </configuration>
+
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -281,6 +293,49 @@
     </pluginManagement>
 
     <plugins>
+
+      <plugin>
+        <groupId>eu.stamp-project</groupId>
+        <artifactId>pitmp-maven-plugin</artifactId>
+        <version>1.3.7</version>
+        <!-- List all the packages of the project that contain classes you want
+             to be mutated.
+             All PIT's properties can be used.
+        -->
+
+        <configuration>
+          <mutators>
+            <mutator>
+              CONDITIONALS_BOUNDARY
+            </mutator>
+            <mutator>
+              INVERT_NEGS
+            </mutator>
+          </mutators>
+          <maxMutationsPerClass>1</maxMutationsPerClass>
+          <targetModules>
+            <param>tajo-cluster-tests</param>
+            <param>tajo-client</param>
+            <param>tajo-core</param>
+          </targetModules>
+          <targetClasses>
+            <param>org.apache.tajo.master.QueryManager</param>
+            <param>org.apache.tajo.client.QueryClientImpl</param>
+          </targetClasses>
+          <targetTests>
+            <param>org.apache.tajo.tests.querymanager.GetFinishedQuery</param>
+            <param>org.apache.tajo.tests.querymanager.GetQueryInProgressTest</param>
+            <param>org.apache.tajo.tests.querymanager.ServiceInitTest</param>
+            <param>org.apache.tajo.tests.querymanager.StopQueryTest</param>
+            <param>org.apache.tajo.tests.queryclientimpl.GetQueryStatusTest</param>
+            <param>org.apache.tajo.tests.queryclientimpl.ExecuteQueryTest</param>
+            <param>org.apache.tajo.tests.queryclientimpl.ExecuteQueryAndGetResultTest</param>
+          </targetTests>
+          <verbose>true</verbose>
+          <threads>1</threads>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
@@ -337,6 +392,33 @@
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
+    </profile>
+
+    <!-- baudaz -->
+    <profile>
+      <id>baduaProfile</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.21.0</version>
+            <configuration>
+              <argLine>
+                -Xmx1024m -XX:MaxPermSize=512m -javaagent:${basedir}/../ba-dua-lib/ba-dua-agent-rt-0.4.1-SNAPSHOT-all.jar
+                -Xbootclasspath/p:${basedir}/../ba-dua-lib/ba-dua-agent-rt-0.4.1-SNAPSHOT-all.jar -Dfile.encoding=${project.build.sourceEncoding} </argLine>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+              <forkCount>3</forkCount>
+              <reuseForks>true</reuseForks>
+              <!-- <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds> -->
+              <rerunFailingTestsCount>2</rerunFailingTestsCount>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
 
     <profile>
@@ -438,5 +520,48 @@
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>coverage</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.22.2</version>
+            <configuration>
+              <argLine>
+                ${argLine}
+                -Xmx2G -Djava.net.preferIPv4Stack=true
+                -Dio.netty.leakDetection.level=paranoid
+              </argLine>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+              <forkCount>3</forkCount>
+              <reuseForks>true</reuseForks>
+              <!-- <forkedProcessTimeoutInSeconds>1800</forkedProcessTimeoutInSeconds> -->
+              <rerunFailingTestsCount>2</rerunFailingTestsCount>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>prepare-agent</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+
   </profiles>
 </project>

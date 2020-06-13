@@ -124,7 +124,7 @@ public class GetFinishedQuery extends QueryTestCaseBase {
         Assert.assertTrue(retv);
     }
 
-
+/*
     @Test
     public void nullQueryID() throws QueryNotFoundException {
         Boolean retv = false;
@@ -142,7 +142,7 @@ public class GetFinishedQuery extends QueryTestCaseBase {
         }
 
         Assert.assertTrue(retv);
-    }
+    }*/
 }
 
 
