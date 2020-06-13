@@ -20,8 +20,5 @@ git:
 
 
 install: mvn clean install -q -DfailIfNoTests=false -Dhadoop.version=2.7.1 -Dlicense.skip  -Drat.skip=true -Drat.numUnapprovedLicenses=100000
-script: mvn test -pl tajo-cluster-tests
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  #- mvn verify -DfailIfNoTests=false -Dmaven.test.failure.ignore=true org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
-#- mvn clean -q -ff -Dsurefire.useFile=false -Dhadoop.version=2.3.0 -DfailIfNoTests=false -Dmaven.test.failure.ignore=true  -Pdist -DskipTests -Dtar org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=Esposito-Matteo_tajo
+script: mvn clean verify -Drat.skip=true  -Drat.numUnapprovedLicenses=10000000 -Pcoverage
 
