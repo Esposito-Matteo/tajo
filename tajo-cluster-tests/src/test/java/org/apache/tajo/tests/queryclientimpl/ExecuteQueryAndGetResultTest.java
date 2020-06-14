@@ -12,6 +12,7 @@ import org.apache.tajo.util.KeyValueSet;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.nio.channels.ScatteringByteChannel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -42,8 +43,10 @@ public class ExecuteQueryAndGetResultTest extends QueryTestCaseBase {
         try {
             ResultSet queryAndGetResult = queryClient.executeQueryAndGetResult(null);
             Assert.fail();
-        } catch (NullPointerException e) {
+        }catch( NullPointerException e) {
             Assert.assertTrue(true);
+        } catch (RuntimeException e) {
+            Assert.fail();
         }
     }
 
@@ -53,7 +56,9 @@ public class ExecuteQueryAndGetResultTest extends QueryTestCaseBase {
         try {
             ResultSet queryAndGetResult = queryClient.executeQueryAndGetResult("INSERT INTO table3 values (3, 3);");
             Assert.fail();
-        } catch (TajoInternalError e) {
+        } catch (RuntimeException e) {
+            Assert.fail();
+        }catch( TajoInternalError e) {
             Assert.assertTrue(true);
         }
     }
@@ -64,18 +69,19 @@ public class ExecuteQueryAndGetResultTest extends QueryTestCaseBase {
             ClientProtos.SubmitQueryResponse res3 = queryClient.executeQuery("INSERT INTO table3 values (3, 'A');");
             ResultSet queryAndGetResult = queryClient.executeQueryAndGetResult("SELECT * FROM table3 where c1=3");
              Assert.assertTrue(true);
-        } catch (TajoInternalError e) {
+        } catch (RuntimeException TajoInternalError e) { // Added RuntimException handler for PIT Mutations
             Assert.fail();
         }
     }*/ // not having Tajo correctly up and running this test could in some cases, due to some bug in implementation
     // run into an infinite loop
 
     @Test // added for jacoco
-    public void defaultSQLCase() throws TajoException, SQLException {
+    public void defaultSQLCase() {
         try {
             ResultSet queryAndGetResult = queryClient.executeQueryAndGetResult("INSERT INTO table3 values (3, 'a');");
+
             Assert.assertTrue(true);
-        } catch (TajoInternalError e) {
+        } catch (RuntimeException | TajoInternalError | TajoException e) {  // Added RuntimException handler for PIT Mutations
              Assert.fail();
         }
     }

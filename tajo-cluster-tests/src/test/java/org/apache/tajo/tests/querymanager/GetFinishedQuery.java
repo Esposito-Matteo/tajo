@@ -49,38 +49,6 @@ public class GetFinishedQuery extends QueryTestCaseBase {
 
 
     }
-    /*
-
-                Session session = new Session("sessionTest",res3.getUserName(),       getCurrentDatabase());
-            queryId = queryManager.scheduleQuery(
-                    session,
-                    context ,
-                    "SELECT * FROM table3;",
-                    "",
-                    null).getQueryId();
-
-           if (!expected) {
-                    assertEquals(ClientProtos.SubmitQueryResponse.ResultType.FETCH, res.getResultType());
-                    QueryStatus status = TajoClientUtil.waitCompletion(client, queryId);
-                    assertEquals(TajoProtos.QueryState.QUERY_SUCCEEDED, status.getState());
-                    client.closeQuery(queryId);
-                } else {
-                 //   assertEquals(ClientProtos.SubmitQueryResponse.ResultType.ENCLOSED, res.getResultType());
-               QueryInProgress queryInProgress = queryManager.getQueryInProgress(queryId);
-               Collection<QueryInProgress> queryInfo = queryManager.getSubmittedQueries();
-               queryManager.stopQuery(queryId);
-               queryInfo = queryManager.getSubmittedQueries();
-               // QueryInfo queryInfo = queryManager.getSubmittedQueries(queryId);
-                 ///   assertNotNull(queryInfo);
-                    //assertTrue(StringUtils.isEmpty(queryInfo.getQueryMasterHost()));
-                    client.closeQuery(queryId);
-                }
-
-
-
-           /*     TajoMemoryResultSet set = (TajoMemoryResultSet) executeString("CREATE DATABASE \"TestSelectQuery\"");
-                QueryInfo queryInfo =  testingCluster.getMaster().getContext().getQueryJobManager().getFinishedQuery(queryId);
-                System.out.println("test");*/
 
 
     @After
@@ -98,8 +66,9 @@ public class GetFinishedQuery extends QueryTestCaseBase {
             QueryManager queryManager = testingCluster.getMaster().getContext().getQueryJobManager();
             QueryInfo queryInfo = queryManager.getFinishedQuery(queryId);
             Assert.assertTrue(queryInfo.getQueryState().equals(TajoProtos.QueryState.QUERY_SUCCEEDED));
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
+            Assert.fail();
         }
     }
 
@@ -118,7 +87,7 @@ public class GetFinishedQuery extends QueryTestCaseBase {
             } else {
                 retv = false;
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
             Assert.fail();
         }
