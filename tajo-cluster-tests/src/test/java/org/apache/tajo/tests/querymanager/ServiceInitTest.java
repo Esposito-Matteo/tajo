@@ -58,10 +58,10 @@ public class ServiceInitTest {
 
           QueryManager queryManager = new QueryManager(tajoMaster.getContext());
           if(!expected){
-              queryManager.init(null);
+              queryManager.serviceInit(null);
 
           }else {
-              queryManager.init(tajoConf);
+              queryManager.serviceInit(tajoConf);
           }
           result = true;
       }catch(Exception e){

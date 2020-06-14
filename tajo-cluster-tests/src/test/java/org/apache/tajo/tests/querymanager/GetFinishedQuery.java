@@ -3,6 +3,7 @@ package org.apache.tajo.tests.querymanager;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.tajo.QueryId;
+import org.apache.tajo.TajoIdProtos;
 import org.apache.tajo.TajoProtos;
 import org.apache.tajo.client.QueryStatus;
 import org.apache.tajo.client.TajoClientUtil;
@@ -124,13 +125,14 @@ public class GetFinishedQuery extends QueryTestCaseBase {
         Assert.assertTrue(retv);
     }
 
-/*
-    @Test
+
+ /*   @Test
     public void nullQueryID() throws QueryNotFoundException {
         Boolean retv = false;
         try {
+            ClientProtos.SubmitQueryResponse res2 = client.executeQuery("CREATE TABLE table3 (c1 int, c2 varchar);");
             QueryManager queryManager = testingCluster.getMaster().getContext().getQueryJobManager();
-            QueryInfo queryInfo = queryManager.getFinishedQuery(null);
+            QueryInfo queryInfo = queryManager.getFinishedQuery(new QueryId(res2.getQueryId()));
             if (queryInfo == null) {
                 retv = true;
             } else {
@@ -138,7 +140,8 @@ public class GetFinishedQuery extends QueryTestCaseBase {
             }
 
         } catch (Exception e) {
-            Assert.fail();
+            System.err.println("it wasn't supposed to be here! Jvm bug");
+             Assert.fail(); // due to consisntency checks and buggyness
         }
 
         Assert.assertTrue(retv);
